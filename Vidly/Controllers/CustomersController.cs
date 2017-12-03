@@ -48,7 +48,13 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-            return View();
+            var membershipTypes = _context.MembershipTypes.ToList();
+            var membershipTypeVM = new NewCustomerViewModel()
+            {
+                MembershipTypes = membershipTypes
+            };
+
+            return View(membershipTypeVM);
         }
 
         [Route("Customers/Details/{id}")]
