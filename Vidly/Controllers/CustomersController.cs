@@ -46,6 +46,11 @@ namespace Vidly.Controllers
             return View(customers);
         }
 
+        public ActionResult New()
+        {
+            return View();
+        }
+
         [Route("Customers/Details/{id}")]
         public ActionResult Details(int id)
         {
