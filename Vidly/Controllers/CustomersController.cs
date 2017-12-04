@@ -46,17 +46,58 @@ namespace Vidly.Controllers
             return View(customers);
         }
 
-        public ActionResult New()
+        public ActionResult CustomerForm()
         {
             var membershipTypes = _context.MembershipTypes.ToList();
-            var membershipTypeVM = new NewCustomerViewModel()
+            var membershipTypeVM = new CustomerFormViewModel()
             {
                 MembershipTypes = membershipTypes
             };
 
-            return View(membershipTypeVM);
+            return View("CustomerForm",membershipTypeVM);
         }
 
+        [HttpPost]
+        public ActionResult Save(Customer customer)
+        {
+            if(customer.Id == 0)
+                _context.Customers.Add(customer);
+            else
+            {
+                var CustomerInDb = _context.Customers.Single(c => c.Id == customer.Id);
+
+                //method 1 - TryUpdateModel() -- not so reliable since all properties need not be updated, and maybe some should not be updated ever!
+                // FYI - to update some properties using this method, specify in 3 rd position of this methods overload the properties to update.
+                CustomerInDb.Name = customer.Name;
+                CustomerInDb.Birthday = customer.Birthday;
+                CustomerInDb.MembershipTypeId = customer.MembershipTypeId;
+                CustomerInDb.IsSubscribedToNewsLetter = customer.IsSubscribedToNewsLetter;
+                //if dont want to use every property , may require an automapper to update based on convention.
+                //if want to restrict updates to only certain properties , then create a DTO (data transfer object)
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Customers");
+        }
+
+
+        public ActionResult Edit(int id)
+        {
+            var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
+
+            if (customer == null)
+                return HttpNotFound();
+    
+            var ViewModel = new CustomerFormViewModel
+            {
+                Customer = customer,
+                MembershipTypes = _context.MembershipTypes.ToList()
+            };
+
+
+            return View("CustomerForm", ViewModel);
+
+        }
         [Route("Customers/Details/{id}")]
         public ActionResult Details(int id)
         {
