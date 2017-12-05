@@ -6,11 +6,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Vidly.Models
 {
-    public class GenreType
+    public class Genre
     {
-        public short GenreTypeId { get; set; }
+        public byte Id { get; set; }
+
         [Required]
-        [StringLength(25)]
-        public string GenreName { get; set; }
+        [StringLength(255)]
+        public string Name { get; set; }
     }
 }

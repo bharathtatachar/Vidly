@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Vidly.Models;
 using Vidly.ViewModels;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 
 namespace Vidly.Controllers
 {
@@ -54,9 +55,57 @@ namespace Vidly.Controllers
             return View(viewmodel);
         }
 
+        public ActionResult MovieForm()
+        {
+            var genres = _context.Genres.ToList();
+            var movieFormVM = new MovieFormViewModel
+            {
+                Genres = genres
+            };
+            return View(movieFormVM);
+        }
+
         public ActionResult Edit(int id)
         {
-            return Content("id=" + id);
+            var movie = _context.Movies.Include(g => g.Genre).SingleOrDefault(m => m.Id == id);
+
+            if (movie.Id == 0)
+             return  HttpNotFound();
+
+            var movieformVM = new MovieFormViewModel
+            {
+                Movie = movie,
+                Genres = _context.Genres.ToList()
+            };
+
+            return View("MovieForm", movieformVM);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Movie movie)
+        {
+            try
+            {
+                if (movie.Id == 0)
+                    _context.Movies.Add(movie);
+                else
+                {
+                    var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
+
+                    movieInDb.Name = movie.Name;
+                    movieInDb.ReleaseDate = movie.ReleaseDate;
+                    movieInDb.GenreId = movie.GenreId;
+                    movieInDb.NumberInStock = movie.NumberInStock;
+                    movieInDb.DateAdded = movie.DateAdded;
+                }
+                _context.SaveChanges();
+            }
+            catch(DbEntityValidationException e)
+            {
+                Console.WriteLine(e);
+            }
+           
+            return RedirectToAction("Index", "Movies");
         }
 
         [Route("movies/Index")]
@@ -70,13 +119,13 @@ namespace Vidly.Controllers
 
             //return Content(string.Format("Index={0}&sortBy={1}", pageIndex, sortBy));
             //  MoviesViewModel moviesVM = new MoviesViewModel { Movies = lstMovies };
-            var movies = _context.Movies.Include(c => c.GenreType);
+            var movies = _context.Movies.Include(c => c.Genre);
             return View(movies);
         }
         [Route("movies/GetDetails/{id}")]
         public ActionResult Details(int id)
         {
-            var movie = _context.Movies.Include(c => c.GenreType).FirstOrDefault(x => x.Id == id);
+            var movie = _context.Movies.Include(c => c.Genre).FirstOrDefault(x => x.Id == id);
             return View(movie);
         }
         [Route("movies/released/{year}/{month:regex(\\d{2})}")]

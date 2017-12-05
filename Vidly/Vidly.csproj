@@ -227,17 +227,42 @@
     <Compile Include="Migrations\201711262016231_PopulateGenreTypes.Designer.cs">
       <DependentUpon>201711262016231_PopulateGenreTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712042337168_AddedGenreTypeID.cs" />
+    <Compile Include="Migrations\201712042337168_AddedGenreTypeID.Designer.cs">
+      <DependentUpon>201712042337168_AddedGenreTypeID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712042347353_dropGenreType_GenreTypeID.cs" />
+    <Compile Include="Migrations\201712042347353_dropGenreType_GenreTypeID.Designer.cs">
+      <DependentUpon>201712042347353_dropGenreType_GenreTypeID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712050422314_removedmoviemodel.cs" />
+    <Compile Include="Migrations\201712050422314_removedmoviemodel.Designer.cs">
+      <DependentUpon>201712050422314_removedmoviemodel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712050429012_UpdatedMovieModel.cs" />
+    <Compile Include="Migrations\201712050429012_UpdatedMovieModel.Designer.cs">
+      <DependentUpon>201712050429012_UpdatedMovieModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712050431375_PopulateGenreTypes1.cs" />
+    <Compile Include="Migrations\201712050431375_PopulateGenreTypes1.Designer.cs">
+      <DependentUpon>201712050431375_PopulateGenreTypes1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712050713157_MakeReleaseDateNullable.cs" />
+    <Compile Include="Migrations\201712050713157_MakeReleaseDateNullable.Designer.cs">
+      <DependentUpon>201712050713157_MakeReleaseDateNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\GenreType.cs" />
+    <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MembershipType.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\CustomersViewModel.cs" />
-    <Compile Include="ViewModels\MoviesViewModel.cs" />
     <Compile Include="ViewModels\CustomerFormViewModel.cs" />
+    <Compile Include="ViewModels\MovieFormViewModel.cs" />
+    <Compile Include="ViewModels\MoviesViewModel.cs" />
     <Compile Include="ViewModels\RandomMovieViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +311,7 @@
     <Content Include="Views\Movies\Random.cshtml" />
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\Customers\CustomerForm.cshtml" />
+    <Content Include="Views\Movies\MovieForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -327,6 +353,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711262016231_PopulateGenreTypes.resx">
       <DependentUpon>201711262016231_PopulateGenreTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712042337168_AddedGenreTypeID.resx">
+      <DependentUpon>201712042337168_AddedGenreTypeID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712042347353_dropGenreType_GenreTypeID.resx">
+      <DependentUpon>201712042347353_dropGenreType_GenreTypeID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712050422314_removedmoviemodel.resx">
+      <DependentUpon>201712050422314_removedmoviemodel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712050429012_UpdatedMovieModel.resx">
+      <DependentUpon>201712050429012_UpdatedMovieModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712050431375_PopulateGenreTypes1.resx">
+      <DependentUpon>201712050431375_PopulateGenreTypes1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712050713157_MakeReleaseDateNullable.resx">
+      <DependentUpon>201712050713157_MakeReleaseDateNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
