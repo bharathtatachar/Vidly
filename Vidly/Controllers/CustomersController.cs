@@ -49,8 +49,10 @@ namespace Vidly.Controllers
         public ActionResult CustomerForm()
         {
             var membershipTypes = _context.MembershipTypes.ToList();
+            Customer cstmer = new Customer();
             var membershipTypeVM = new CustomerFormViewModel()
             {
+                Customer = cstmer,
                 MembershipTypes = membershipTypes
             };
 
@@ -58,12 +60,42 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(Customer customer)
+        [ValidateAntiForgeryToken]
+        public ActionResult Add([Bind(Exclude = "Id")] Customer customer)
         {
+            if(!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+            return View("CustomerForm", viewModel);
+            }
             if(customer.Id == 0)
                 _context.Customers.Add(customer);
-            else
+            
+
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Customers");
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Update(Customer customer)
+        {
+            if (!ModelState.IsValid)
             {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+                return View("CustomerForm", viewModel);
+            }
+           
                 var CustomerInDb = _context.Customers.Single(c => c.Id == customer.Id);
 
                 //method 1 - TryUpdateModel() -- not so reliable since all properties need not be updated, and maybe some should not be updated ever!
@@ -74,7 +106,7 @@ namespace Vidly.Controllers
                 CustomerInDb.IsSubscribedToNewsLetter = customer.IsSubscribedToNewsLetter;
                 //if dont want to use every property , may require an automapper to update based on convention.
                 //if want to restrict updates to only certain properties , then create a DTO (data transfer object)
-            }
+            
 
             _context.SaveChanges();
             return RedirectToAction("Index", "Customers");

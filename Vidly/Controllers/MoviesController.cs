@@ -72,24 +72,59 @@ namespace Vidly.Controllers
             if (movie.Id == 0)
              return  HttpNotFound();
 
-            var movieformVM = new MovieFormViewModel
-            {
-                Movie = movie,
+            var movieformVM = new MovieFormViewModel(movie)
+            {               
                 Genres = _context.Genres.ToList()
             };
 
             return View("MovieForm", movieformVM);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Save(Movie movie)
+        public ActionResult Add([Bind(Exclude ="Id")] Movie movie)
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    var movieFormVM = new MovieFormViewModel(movie)
+                    {                        
+                        Genres = _context.Genres.ToList()
+                    };
+
+                    return View("MovieForm", movieFormVM);
+                }
+
                 if (movie.Id == 0)
                     _context.Movies.Add(movie);
-                else
+           
+                _context.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return RedirectToAction("Index", "Movies");
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Update(Movie movie)
+        {
+            try
+            {
+                if(!ModelState.IsValid)
                 {
+                    var movieFormVM = new MovieFormViewModel(movie)
+                    {                        
+                        Genres = _context.Genres.ToList()
+                    };
+
+                    return View("MovieForm", movieFormVM);
+                }
+             
                     var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
 
                     movieInDb.Name = movie.Name;
@@ -97,7 +132,7 @@ namespace Vidly.Controllers
                     movieInDb.GenreId = movie.GenreId;
                     movieInDb.NumberInStock = movie.NumberInStock;
                     movieInDb.DateAdded = movie.DateAdded;
-                }
+                
                 _context.SaveChanges();
             }
             catch(DbEntityValidationException e)
